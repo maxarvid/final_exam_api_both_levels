@@ -1,10 +1,14 @@
 class Api::CommentsController < ApplicationController
   def create
-    if Article.exists?(comment_params[:article_id])
-      Comment.create(body: comment_params[:body], article_id: comment_params[:article_id])
+    comment = Comment.new(comment_params)
+    comment.save
+
+    if comment.persisted?
       render json: { message: 'The comment was created' }, status: 201
-    else
+    elsif !comment[:body]
       render json: { message: 'The comment cannot be empty' }, status: 422
+    else
+      render json: { message: 'Comments must be made on an article' }, status: 422
     end
   end
 
