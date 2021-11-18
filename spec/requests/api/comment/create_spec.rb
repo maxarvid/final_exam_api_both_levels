@@ -35,4 +35,19 @@ describe 'POST /api/comments', type: :request do
       expect(response_json['message']).to eq 'The comment cannot be empty'
     end
   end
+
+  describe 'unsuccessfully: with no associated article' do
+    before do
+      post '/api/comments',
+           params: { comment: { body: 'I am a comment body' } }
+    end
+
+    it 'is expected to return a 422 response' do
+      expect(response).to have_http_status 422
+    end
+
+    it 'is expected to return an error message' do
+      expect(response_json['message']).to eq 'Comments must be made on an article'
+    end
+  end
 end
