@@ -1,13 +1,14 @@
 describe 'POST /api/comments', type: :request do
   subject { response }
   let!(:article) { create(:article) }
-  let(:user) { create(:user)}
-  let(:credentials) { user.create_new_auth_token}
+  let(:user) { create(:user) }
+  let(:credentials) { user.create_new_auth_token }
 
   describe 'successfully' do
     before do
       post '/api/comments',
-           params: { comment: { article_id: article.id, body: 'I am the body of the comment' } }
+           params: { comment: { article_id: article.id, body: 'I am the body of the comment' } },
+           headers: credentials
     end
 
     it 'is expected to return a 201 response' do
@@ -26,7 +27,8 @@ describe 'POST /api/comments', type: :request do
   describe 'unsuccessfully: with no content in comment' do
     before do
       post '/api/comments',
-           params: { comment: { article_id: article.id } }
+           params: { comment: { article_id: article.id } },
+           headers: credentials
     end
 
     it 'is expected to return a 422 response' do
@@ -41,7 +43,8 @@ describe 'POST /api/comments', type: :request do
   describe 'unsuccessfully: with no associated article' do
     before do
       post '/api/comments',
-           params: { comment: { body: 'I am a comment body' } }
+           params: { comment: { body: 'I am a comment body' } },
+           headers: credentials
     end
 
     it 'is expected to return a 422 response' do
@@ -56,7 +59,7 @@ describe 'POST /api/comments', type: :request do
   describe 'unsuccessfully: with user is not authorized' do
     before do
       post '/api/comments',
-      params: { comment: { article_id: article.id, body: 'I am the body of the comment' } }
+           params: { comment: { article_id: article.id, body: 'I am the body of the comment' } }
     end
 
     it 'is expected to return a 401 response' do
