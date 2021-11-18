@@ -1,7 +1,7 @@
 describe 'POST /api/comments', type: :request do
   describe 'successfully' do
     before do
-      post 'api/comments',
+      post '/api/comments',
            params: { comment: { body: 'I am the body of the comment' } }
     end
 
