@@ -11,7 +11,7 @@ describe 'POST /api/comments', type: :request do
     
 
     it 'is expected to return a message' do
-      expect(response_json['message']).to eq 'The commment was created'
+      expect(response_json['message']).to eq 'The comment was created'
     end
 
     it 'is expected to save the comment in the comments table' do

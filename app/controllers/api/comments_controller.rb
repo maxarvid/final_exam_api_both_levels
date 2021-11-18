@@ -1,8 +1,13 @@
 class Api::CommentsController < ApplicationController
 
   def create
-    
+    Comment.create(body: comment_params)
+    render json: { message: 'The comment was created' }, status: 201
+  end
 
-    render json: { message: 'Hello world!' }, status: 201
+  private
+
+  def comment_params
+    params.require(:comment).permit(:body)
   end
 end
