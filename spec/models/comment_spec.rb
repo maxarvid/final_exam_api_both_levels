@@ -6,4 +6,10 @@ RSpec.describe Comment, type: :model do
   describe 'Validations' do
     it { is_expected.to validate_presence_of :body }
   end
+
+  describe 'Factory' do
+    it 'is expected to have valid Factory' do
+      expect(create(:comment)).to be_valid
+    end
+  end
 end
