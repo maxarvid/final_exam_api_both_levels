@@ -1,6 +1,8 @@
 describe 'POST /api/comments', type: :request do
   subject { response }
   let!(:article) { create(:article) }
+  let(:user) { create(:user)}
+  let(:credentials) { user.create_new_auth_token}
 
   describe 'successfully' do
     before do
@@ -48,6 +50,21 @@ describe 'POST /api/comments', type: :request do
 
     it 'is expected to return an error message' do
       expect(response_json['message']).to eq 'Comments must be made on an article'
+    end
+  end
+
+  describe 'unsuccessfully: with user is not authorized' do
+    before do
+      post '/api/comments',
+      params: { comment: { article_id: article.id, body: 'I am the body of the comment' } }
+    end
+
+    it 'is expected to return a 401 response' do
+      expect(response).to have_http_status 401
+    end
+
+    it 'is expected to return an error message' do
+      expect(response_json['errors'].first).to eq 'You need to sign in or sign up before continuing.'
     end
   end
 end
